@@ -2,29 +2,11 @@
 import React from "react";
 import { useState } from "react";
 
-const initialList = [
-  {
-    id: "something",
-    name: "something",
-    complete: false,
-  },
-  {
-    id: "something2",
-    name: "something2",
-    complete: true,
-  },
-];
-
-const initalCompleteCount = () => {
-  const count = initialList.reduce((a, item) => a + !item.complete, 0);
-  return count;
-};
-
 const Todolist = ({ title }) => {
-  const [list, setList] = useState(initialList);
-  const [visibleList, setVisibleList] = useState(initialList);
+  const [list, setList] = useState([]);
+  const [visibleList, setVisibleList] = useState([]);
   const [currentInput, setcurrentInput] = useState("");
-  const [completeCount, setCompleteCount] = useState(initalCompleteCount());
+  const [completeCount, setCompleteCount] = useState(0);
   const [flipCompleteFlag, setFlipCompleteFlag] = useState(false);
   // Updates for input Check for enter -> call handleAdd()
   const handleKeyUp = (event) => {
@@ -75,7 +57,6 @@ const Todolist = ({ title }) => {
     setVisibleList(newList);
     const count = newList.reduce((a, item) => a + !item.complete, 0);
     setCompleteCount(count);
-    updateCompleteCount();
   };
 
   const filterbyActive = () => {
@@ -128,7 +109,7 @@ const Todolist = ({ title }) => {
         {title}
       </h2>
 
-      {/* Input for adding items to list */}
+      {/* Adding first row */}
       <div className="flex flex-row flex-none flex-nowrap">
         <button
           onClick={() => flipComplete()}
@@ -144,14 +125,11 @@ const Todolist = ({ title }) => {
           placeholder="Add item to be done"
           autoFocus
         ></input>
-        <button
-          onClick={() => console.log("delete click")}
-          className="outline outline-1 outline-black px-6 text-3xl text-red-600"
-        >
+        <button className="outline outline-1 outline-black px-6 text-3xl text-red-600">
           <span className="invisible">X</span>
         </button>
       </div>
-      {/* Div for items that are added to the list */}
+      {/* Creating Items from list */}
       <div>
         <ul>
           {visibleList.map((item) => (
@@ -189,6 +167,7 @@ const Todolist = ({ title }) => {
             </div>
           ))}
         </ul>
+        {/* Filter buttons */}
         <div className="flex flex-row">
           <p className="text-slate-400 mt-3">{completeCount} to-do</p>
           <button
