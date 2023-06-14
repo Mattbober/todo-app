@@ -79,11 +79,9 @@ const Todolist = ({ title }) => {
   const flipComplete = () => {
     var newList = list.slice();
 
-    if (flipCompleteFlag) {
-      newList.forEach((i) => (i.complete = false));
-    } else {
-      newList.forEach((i) => (i.complete = true));
-    }
+    flipCompleteFlag
+      ? newList.forEach((i) => (i.complete = false))
+      : newList.forEach((i) => (i.complete = true));
 
     setList(newList);
     setVisibleList(newList);
@@ -105,12 +103,12 @@ const Todolist = ({ title }) => {
 
   return (
     <div className="flex justify-center flex-col mt-36 w-5/12 shadow-xl p-4 bg-slate-100">
-      <h2 className="text-6xl font-bold dark:text-gray text-center bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text mb-5">
+      <h2 className="text-6xl font-bold dark:text-gray text-center bg-gradient-to-r from-indigo-700 to-indigo-500 outline-4 inline-block text-transparent bg-clip-text mb-3 p-1 font-bold">
         {title}
       </h2>
 
       {/* Adding first row */}
-      <div className="flex flex-row flex-none flex-nowrap">
+      <div className="flex flex-row flex-none flex-nowrap mt-2">
         <button
           onClick={() => flipComplete()}
           className="outline outline-1 px-6 text-2xl text-slate-600"
