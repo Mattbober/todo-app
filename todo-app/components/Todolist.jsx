@@ -3,12 +3,15 @@ import React from "react";
 import { useState } from "react";
 
 const Todolist = ({ title }) => {
+  // Start of states
   const [list, setList] = useState([]);
   const [visibleList, setVisibleList] = useState([]);
   const [currentInput, setcurrentInput] = useState("");
   const [completeCount, setCompleteCount] = useState(0);
   const [flipCompleteFlag, setFlipCompleteFlag] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
+  //
+
   // Updates for input Check for enter -> call handleAdd()
   const handleKeyUp = (event) => {
     setcurrentInput(event.target.value);
@@ -28,18 +31,22 @@ const Todolist = ({ title }) => {
     setCompleteCount(count);
   }
 
+  //Updates counter state for to-do items
   const updateCompleteCount = () => {
     const count = list.reduce((a, item) => a + !item.complete, 0);
     setCompleteCount(count);
     return count;
   };
 
+  //Clears completed tasks
   const clearCompleted = () => {
     const newClearedList = list.slice();
     var filteredItems = newClearedList.filter((i) => i.complete == false);
     setList(filteredItems);
     setVisibleList(filteredItems);
   };
+
+  //Handles the usecase for user clicking on a tick to mark it as complete
   const handleComplete = (id) => {
     const newList = list.slice();
     var foundIndex = newList.findIndex((item) => item.id == id);
@@ -50,6 +57,7 @@ const Todolist = ({ title }) => {
     updateCompleteCount();
   };
 
+  //Handles the usecase for user clicking on the X to remove it
   const handleDelete = (id) => {
     const newList = list.slice();
     var foundIndex = newList.findIndex((item) => item.id == id);
@@ -60,6 +68,7 @@ const Todolist = ({ title }) => {
     setCompleteCount(count);
   };
 
+  //Updates visibleList (List which is rendered) to show incomplete items only.
   const filterbyActive = () => {
     const newVisibleList = list.slice();
     var filteredItems = newVisibleList.filter((i) => i.complete == false);
@@ -67,12 +76,14 @@ const Todolist = ({ title }) => {
     setActiveFilter("active");
   };
 
+  //Updates visibleList (List which is rendered) to show all items.
   const filterbyAll = () => {
     const filteredItems = list.slice();
     setVisibleList(filteredItems);
     setActiveFilter("all");
   };
 
+  //Updates visibleList (List which is rendered) to show complete items.
   const filterbyComplete = () => {
     const newVisibleList = list.slice();
     var filteredItems = newVisibleList.filter((i) => i.complete == true);
@@ -80,6 +91,7 @@ const Todolist = ({ title }) => {
     setActiveFilter("complete");
   };
 
+  //This has two states, the first time user clicks this it will mark all items as complete, from then on it will alternate between turning all items off and on every second click.
   const flipComplete = () => {
     var newList = list.slice();
 
@@ -93,7 +105,7 @@ const Todolist = ({ title }) => {
     updateCompleteCount();
   };
 
-  const onChangeInput = (e, itemId) => {
+  const onChangeInputEdit = (e, itemId) => {
     if (e.key === "Enter") {
       const { value } = e.target;
       let id = itemId;
@@ -155,14 +167,13 @@ const Todolist = ({ title }) => {
                   ✓
                 </button>
               )}
-              {/* Render list items */}
 
+              {/* Render list items  (Id is currently the contents of the item. Two items with the exact same name cannot be input, current limitation.)*/}
               <input
                 className="outline outline-1 w-full p-6 bg-slate-100 placeholder-gray-800 w-full p-6"
                 type="text"
                 defaultValue={item.name}
-                onChange={console.log("hello")}
-                onKeyUp={(e) => onChangeInput(e, item.id)}
+                onKeyUp={(e) => onChangeInputEdit(e, item.id)}
               />
               <button
                 onClick={() => handleDelete(item.id)}
@@ -176,7 +187,6 @@ const Todolist = ({ title }) => {
         {/* Filter buttons */}
         <div className="flex flex-row">
           <p className="text-slate-400 mt-3">{completeCount} to-do</p>
-
           {/* Start of filter buttons (selected and not) */}
           {activeFilter == "all" ? (
             <button
