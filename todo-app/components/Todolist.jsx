@@ -8,6 +8,7 @@ const Todolist = ({ title }) => {
   const [currentInput, setcurrentInput] = useState("");
   const [completeCount, setCompleteCount] = useState(0);
   const [flipCompleteFlag, setFlipCompleteFlag] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("all");
   // Updates for input Check for enter -> call handleAdd()
   const handleKeyUp = (event) => {
     setcurrentInput(event.target.value);
@@ -63,17 +64,20 @@ const Todolist = ({ title }) => {
     const newVisibleList = list.slice();
     var filteredItems = newVisibleList.filter((i) => i.complete == false);
     setVisibleList(filteredItems);
+    setActiveFilter("active");
   };
 
   const filterbyAll = () => {
     const filteredItems = list.slice();
     setVisibleList(filteredItems);
+    setActiveFilter("all");
   };
 
   const filterbyComplete = () => {
     const newVisibleList = list.slice();
     var filteredItems = newVisibleList.filter((i) => i.complete == true);
     setVisibleList(filteredItems);
+    setActiveFilter("complete");
   };
 
   const flipComplete = () => {
@@ -90,15 +94,18 @@ const Todolist = ({ title }) => {
   };
 
   const onChangeInput = (e, itemId) => {
-    const { value } = e.target;
-    let id = value;
+    if (e.key === "Enter") {
+      const { value } = e.target;
+      let id = itemId;
 
-    var newList = list.slice();
-    var foundIndex = newList.findIndex((item) => item.id == id);
-    var foundItem = list.slice(foundIndex, 1);
-    foundItem = value;
-    setList(newList);
-    setVisibleList(newList);
+      var newList = list.slice();
+      var foundIndex = newList.findIndex((item) => item.id == id);
+      var foundItem = newList[foundIndex];
+      foundItem.id = value;
+      foundItem.name = value;
+      setList(newList);
+      setVisibleList(newList);
+    }
   };
 
   return (
@@ -154,7 +161,8 @@ const Todolist = ({ title }) => {
                 className="outline outline-1 w-full p-6 bg-slate-100 placeholder-gray-800 w-full p-6"
                 type="text"
                 defaultValue={item.name}
-                onChange={(e) => onChangeInput(e, item.id)}
+                onChange={console.log("hello")}
+                onKeyUp={(e) => onChangeInput(e, item.id)}
               />
               <button
                 onClick={() => handleDelete(item.id)}
@@ -168,24 +176,54 @@ const Todolist = ({ title }) => {
         {/* Filter buttons */}
         <div className="flex flex-row">
           <p className="text-slate-400 mt-3">{completeCount} to-do</p>
-          <button
-            onClick={() => filterbyAll()}
-            className=" px-2 text-slate-400 hover:text-slate-600 mt-1"
-          >
-            All
-          </button>
-          <button
-            onClick={() => filterbyActive()}
-            className="px-2 text-slate-400 hover:text-slate-600 mt-1"
-          >
-            Active
-          </button>
-          <button
-            onClick={() => filterbyComplete()}
-            className="px-2 text-slate-400 hover:text-slate-600 mt-1"
-          >
-            Completed
-          </button>
+
+          {/* Start of filter buttons (selected and not) */}
+          {activeFilter == "all" ? (
+            <button
+              onClick={() => filterbyAll()}
+              className=" px-2 text-slate-700 hover:text-slate-800 mt-1"
+            >
+              All
+            </button>
+          ) : (
+            <button
+              onClick={() => filterbyAll()}
+              className=" px-2 text-slate-400 hover:text-slate-600 mt-1"
+            >
+              All
+            </button>
+          )}
+          {activeFilter == "active" ? (
+            <button
+              onClick={() => filterbyActive()}
+              className="px-2 text-slate-700 hover:text-slate-800 mt-1"
+            >
+              Active
+            </button>
+          ) : (
+            <button
+              onClick={() => filterbyActive()}
+              className="px-2 text-slate-400 hover:text-slate-600 mt-1"
+            >
+              Active
+            </button>
+          )}
+          {activeFilter == "complete" ? (
+            <button
+              onClick={() => filterbyComplete()}
+              className="px-2 text-slate-700 hover:text-slate-800 mt-1"
+            >
+              Completed
+            </button>
+          ) : (
+            <button
+              onClick={() => filterbyComplete()}
+              className="px-2 text-slate-400 hover:text-slate-600 mt-1"
+            >
+              Completed
+            </button>
+          )}
+          {/* End of filter buttons (selected and not) */}
           <button
             onClick={() => clearCompleted()}
             className="bg-transparent grow ml-1 mt-1 hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
