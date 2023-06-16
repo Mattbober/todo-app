@@ -2,11 +2,11 @@
 import React from "react";
 import { useState } from "react";
 
-const Todolist = ({ title }) => {
+const ToDoList = ({ title }) => {
   // Start of states
   const [list, setList] = useState([]);
   const [visibleList, setVisibleList] = useState([]);
-  const [currentInput, setcurrentInput] = useState("");
+  const [currentInput, setCurrentInput] = useState("");
   const [completeCount, setCompleteCount] = useState(0);
   const [flipCompleteFlag, setFlipCompleteFlag] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
@@ -14,10 +14,10 @@ const Todolist = ({ title }) => {
 
   // Updates for input Check for enter -> call handleAdd()
   const handleKeyUp = (event) => {
-    setcurrentInput(event.target.value);
+    setCurrentInput(event.target.value);
     if (event.key === "Enter") {
       handleAdd(currentInput);
-      setcurrentInput("");
+      setCurrentInput("");
       event.target.value = "";
     }
   };
@@ -69,7 +69,7 @@ const Todolist = ({ title }) => {
   };
 
   //Updates visibleList (List which is rendered) to show incomplete items only.
-  const filterbyActive = () => {
+  const filterByActive = () => {
     const newVisibleList = list.slice();
     var filteredItems = newVisibleList.filter((i) => i.complete == false);
     setVisibleList(filteredItems);
@@ -77,14 +77,14 @@ const Todolist = ({ title }) => {
   };
 
   //Updates visibleList (List which is rendered) to show all items.
-  const filterbyAll = () => {
+  const filterByAll = () => {
     const filteredItems = list.slice();
     setVisibleList(filteredItems);
     setActiveFilter("all");
   };
 
   //Updates visibleList (List which is rendered) to show complete items.
-  const filterbyComplete = () => {
+  const filterByComplete = () => {
     const newVisibleList = list.slice();
     var filteredItems = newVisibleList.filter((i) => i.complete == true);
     setVisibleList(filteredItems);
@@ -190,14 +190,14 @@ const Todolist = ({ title }) => {
           {/* Start of filter buttons (selected and not) */}
           {activeFilter == "all" ? (
             <button
-              onClick={() => filterbyAll()}
+              onClick={() => filterByAll()}
               className=" px-2 text-slate-700 hover:text-slate-800 mt-1"
             >
               All
             </button>
           ) : (
             <button
-              onClick={() => filterbyAll()}
+              onClick={() => filterByAll()}
               className=" px-2 text-slate-400 hover:text-slate-600 mt-1"
             >
               All
@@ -205,14 +205,14 @@ const Todolist = ({ title }) => {
           )}
           {activeFilter == "active" ? (
             <button
-              onClick={() => filterbyActive()}
+              onClick={() => filterByActive()}
               className="px-2 text-slate-700 hover:text-slate-800 mt-1"
             >
               Active
             </button>
           ) : (
             <button
-              onClick={() => filterbyActive()}
+              onClick={() => filterByActive()}
               className="px-2 text-slate-400 hover:text-slate-600 mt-1"
             >
               Active
@@ -220,14 +220,14 @@ const Todolist = ({ title }) => {
           )}
           {activeFilter == "complete" ? (
             <button
-              onClick={() => filterbyComplete()}
+              onClick={() => filterByComplete()}
               className="px-2 text-slate-700 hover:text-slate-800 mt-1"
             >
               Completed
             </button>
           ) : (
             <button
-              onClick={() => filterbyComplete()}
+              onClick={() => filterByComplete()}
               className="px-2 text-slate-400 hover:text-slate-600 mt-1"
             >
               Completed
@@ -246,4 +246,4 @@ const Todolist = ({ title }) => {
   );
 };
 
-export default Todolist;
+export default ToDoList;
